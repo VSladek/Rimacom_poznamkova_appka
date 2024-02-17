@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'note.dart';
 
-/// Displays detailed information about a SampleItem.
-class SampleItemDetailsView extends StatelessWidget {
-  const SampleItemDetailsView({super.key});
+class NoteDetail extends StatelessWidget {
+  const NoteDetail({super.key});
 
   static const routeName = 'note';
 

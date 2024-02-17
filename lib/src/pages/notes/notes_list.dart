@@ -47,7 +47,7 @@ class NoteList extends StatelessWidget {
             onTap: () {
               Navigator.restorablePushNamed(
                 context,
-                SampleItemDetailsView.routeName,
+                NoteDetail.routeName,
               );
             }
           );
