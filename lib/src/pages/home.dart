@@ -50,8 +50,8 @@ class Home extends StatelessWidget {
                 switch (routeSettings.name) {
                   case SettingsView.routeName:
                     return SettingsView(controller: settingsController);
-                  case SampleItemDetailsView.routeName:
-                    return const SampleItemDetailsView();
+                  case NoteDetail.routeName:
+                    return const NoteDetail();
                   case NoteList.routeName:
                   default:
                     return const NoteList();
