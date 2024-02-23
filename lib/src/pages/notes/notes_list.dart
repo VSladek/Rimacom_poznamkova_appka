@@ -11,7 +11,8 @@ class NoteList extends StatelessWidget {
     this.items = const [
       Note(1, "Tda", "Udelej tda", 1598746),
       Note(2, "Rimacom", "Udelej rimacom stranku", 1599524),
-      Note(3, "Cestina", "Udelej ctenarsky denik o bylo nas pet", 1603458)],
+      Note(3, "Cestina", "Udelej ctenarsky denik o bylo nas pet", 1603458)
+    ],
   });
 
   static const routeName = '/';
@@ -33,24 +34,20 @@ class NoteList extends StatelessWidget {
         ],
       ),
       body: ListView.builder(
-        // Providing a restorationId allows the ListView to restore the
-        // scroll position when a user leaves and returns to the app after it
-        // has been killed while running in the background.
         restorationId: 'NotesList',
         itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
           final item = items[index];
 
           return ListTile(
-            title: Text(item.name),
-            leading: Text('${item.id}: '),
-            onTap: () {
-              Navigator.restorablePushNamed(
-                context,
-                NoteDetail.routeName,
-              );
-            }
-          );
+              title: Text(item.name),
+              leading: Text('${item.id}: '),
+              onTap: () {
+                Navigator.restorablePushNamed(
+                  context,
+                  NoteDetail.routeName,
+                );
+              });
         },
       ),
     );
