@@ -8,4 +8,22 @@ class Note {
   final String detail;
 
   final int date;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'detail': detail,
+      'date': date,
+    };
+  }
+
+  factory Note.fromJson(Map<String, dynamic> json) {
+    return Note(
+      json['id'] as int,
+      json['name'] as String,
+      json['detail'] as String,
+      json['date'] as int,
+    );
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rimacom_poznamkova_appka/src/pages/notes/note.dart';
 import 'notes/note_detail.dart';
 import 'notes/notes_list.dart';
 import 'settings/settings_controller.dart';
@@ -26,7 +27,8 @@ class Home extends StatelessWidget {
           //localization
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          locale: const Locale('cs', ''),
+          locale: settingsController.localization,
+
           localeResolutionCallback: (
             locale,
             supportedLocales,
@@ -50,8 +52,10 @@ class Home extends StatelessWidget {
                 switch (routeSettings.name) {
                   case SettingsView.routeName:
                     return SettingsView(controller: settingsController);
-                  case NoteDetail.routeName:
-                    return const NoteDetail();
+                  case NoteDetail.routeName: 
+                    final Map<String, dynamic> noteJson = routeSettings.arguments as Map<String, dynamic>;
+                    final Note notedata = Note.fromJson(noteJson);
+                    return NoteDetail(note: notedata);
                   case NoteList.routeName:
                   default:
                     return const NoteList();

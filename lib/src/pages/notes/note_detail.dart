@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'note.dart';
 
 class NoteDetail extends StatelessWidget {
-  const NoteDetail({super.key});
+  const NoteDetail({super.key,required this.note});
 
   static const routeName = 'note';
+  final Note note;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Item Details'),
+        title: Text(note.name),
       ),
-      body: const Center(
-        child: Text('More Information Here'),
+      body: Center(
+        child: Text(note.detail),
       ),
     );
   }

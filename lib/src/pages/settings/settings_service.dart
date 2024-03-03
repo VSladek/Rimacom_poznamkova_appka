@@ -1,17 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../notes/note_saving.dart';
 
-/// A service that stores and retrieves user settings.
-///
-/// By default, this class does not persist user settings. If you'd like to
-/// persist the user settings locally, use the shared_preferences package. If
-/// you'd like to store settings on a web server, use the http package.
 class SettingsService {
-  /// Loads the User's preferred ThemeMode from local or remote storage.
-  Future<ThemeMode> themeMode() async => ThemeMode.system;
+  static const String _themeKey = 'theme';
+  static const String _languageKey = 'language';
+  static const String _formatKey = 'format';
 
-  /// Persists the user's preferred ThemeMode to local or remote storage.
   Future<void> updateThemeMode(ThemeMode theme) async {
-    // Use the shared_preferences package to persist settings locally or the
-    // http package to persist settings over the network.
+    final SharedPreferences settings = await SharedPreferences.getInstance();
+    await settings.setInt(_themeKey, theme.index);
   }
+
+  Future<ThemeMode> getThemeMode() async {
+    final SharedPreferences settings = await SharedPreferences.getInstance();
+    final int? themeIndex = settings.getInt(_themeKey);
+    return themeIndex != null ? ThemeMode.values[themeIndex] : ThemeMode.system;
+  }
+
+  Future<void> updateLocalization(Locale locale) async {
+    final SharedPreferences settings = await SharedPreferences.getInstance();
+    await settings.setString(_languageKey, locale.languageCode);
+    }
+
+  Future<Locale> getLocalization() async {
+    final SharedPreferences settings = await SharedPreferences.getInstance();
+    final String? languageCode = settings.getString(_languageKey);
+    return languageCode != null ? Locale(languageCode) : const Locale('cs');
+  }
+
+  Future<void> updateFormat(NoteSaveFormat format) async {
+    final SharedPreferences settings = await SharedPreferences.getInstance();
+    await settings.setString(_formatKey, format.format);
+  }
+
+  Future<NoteSaveFormat> getFormat() async {
+    final SharedPreferences settings = await SharedPreferences.getInstance();
+    final String? format = settings.getString(_formatKey);
+    return format != null ? NoteSaveFormat(format) : const NoteSaveFormat('json');
+  }
+
 }

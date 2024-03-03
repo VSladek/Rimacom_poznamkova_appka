@@ -1,5 +1,22 @@
 {
   "@@locale": "en",
   "appTitle": "Notes",
-  "helloWorld": "Hello World!"
+  "settings": "Settings",
+  "language": "Language",
+  "format": "Save Format",
+  "format_txt": "txt",
+  "format_json": "json",
+  "export": "Export Notes",
+  "import": "Import Notes",
+  "theme": "App Theme",
+  "light_theme": "Light Theme",
+  "dark_theme": "Dark Theme",
+  "system_theme": "System Theme",
+  "edit_note": "Edit",
+  "new_note": "New",
+  "delete_note": "Delete",
+  "save": "Save",
+  "title": "Title:",
+  "body": "Body:",
+  "time": "Time:"
 }

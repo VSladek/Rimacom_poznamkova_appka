@@ -1,5 +1,22 @@
 {
   "@@locale": "cs",
   "appTitle": "Poznámky",
-  "helloWorld": "Ahoj Světe!"
+  "settings": "Nastavení",
+  "language": "Jazyk",
+  "format": "Formát ukládání",
+  "format_txt": "txt",
+  "format_json": "json",
+  "export": "Exportovat Poznámky",
+  "import": "Importovat Poznámky",
+  "theme": "Téma Aplikace",
+  "light_theme": "Světlé Téma",
+  "dark_theme": "Tmavé Téma",
+  "system_theme": "Systemové Téma",
+  "edit_note": "Editovat",
+  "new_note": "Nový",
+  "delete_note": "Smazat",
+  "save": "Uložit",
+  "title": "Název:",
+  "body": "Tělo:",
+  "time": "Čas:"
 }

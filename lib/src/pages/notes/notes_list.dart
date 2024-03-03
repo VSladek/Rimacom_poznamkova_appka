@@ -43,9 +43,11 @@ class NoteList extends StatelessWidget {
               title: Text(item.name),
               leading: Text('${item.id}: '),
               onTap: () {
+                final itemJson = item.toJson();
                 Navigator.restorablePushNamed(
                   context,
                   NoteDetail.routeName,
+                  arguments: itemJson,
                 );
               });
         },

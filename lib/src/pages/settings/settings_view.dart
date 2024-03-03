@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'settings_controller.dart';
+import '../notes/note_saving.dart';
 
-/// Displays the various settings that can be customized by the user.
-///
-/// When a user changes a setting, the SettingsController is updated and
-/// Widgets that listen to the SettingsController are rebuilt.
+
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key, required this.controller});
 
@@ -17,35 +15,123 @@ class SettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(AppLocalizations.of(context)!.settings),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        // Glue the SettingsController to the theme selection DropdownButton.
-        //
-        // When a user selects a theme from the dropdown list, the
-        // SettingsController is updated, which rebuilds the MaterialApp.
-        child: DropdownButton<ThemeMode>(
-          // Read the selected themeMode from the controller
-          value: controller.themeMode,
-          // Call the updateThemeMode method any time the user selects a theme.
-          onChanged: controller.updateThemeMode,
+      body: Column(
+        children: [
+          ThemeSetting(controller: controller),
+          LanguageSetting(controller: controller),
+          FileSetting(controller: controller),
+          //Export All Notes - from zip?
+          //Import Notes - from zip?
+        ],
+      ),
+    );
+  }
+}
+
+class FileSetting extends StatelessWidget {
+  const FileSetting({
+    super.key,
+    required this.controller,
+  });
+
+  final SettingsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(width: 16),
+        Text(AppLocalizations.of(context)!.format),
+        const SizedBox(width: 10),
+        DropdownButton<NoteSaveFormat>(
+          value: controller.format,
+          onChanged: controller.updateFormat,
+          items:  [
+            DropdownMenuItem(
+              value: const NoteSaveFormat('json'),
+              child: Text(AppLocalizations.of(context)!.format_json),
+            ),
+            DropdownMenuItem(
+              value: const NoteSaveFormat('txt'),
+              child: Text(AppLocalizations.of(context)!.format_txt),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class LanguageSetting extends StatelessWidget {
+  const LanguageSetting({
+    super.key,
+    required this.controller,
+  });
+
+  final SettingsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(width: 16),
+        Text(AppLocalizations.of(context)!.language),
+        const SizedBox(width: 10),
+        DropdownButton<Locale>(
+          value: controller.localization,
+          onChanged: controller.updateLocalization,
           items: const [
             DropdownMenuItem(
+              value: Locale('cs'),
+              child: Text("Čeština"),
+            ),
+            DropdownMenuItem(
+              value: Locale('en'),
+              child: Text("English"),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class ThemeSetting extends StatelessWidget {
+  const ThemeSetting({
+    super.key,
+    required this.controller,
+  });
+
+  final SettingsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(width: 16),
+        Text(AppLocalizations.of(context)!.theme),
+        const SizedBox(width: 10),
+        DropdownButton<ThemeMode>(
+          value: controller.themeMode,
+          onChanged: controller.updateThemeMode,
+          items:  [
+            DropdownMenuItem(
               value: ThemeMode.system,
-              child: Text('System Theme'),
+              child: Text(AppLocalizations.of(context)!.system_theme),
             ),
             DropdownMenuItem(
               value: ThemeMode.light,
-              child: Text('Light Theme'),
+              child: Text(AppLocalizations.of(context)!.light_theme),
             ),
             DropdownMenuItem(
               value: ThemeMode.dark,
-              child: Text('Dark Theme'),
+              child: Text(AppLocalizations.of(context)!.dark_theme),
             )
           ],
         ),
-      ),
+      ],
     );
   }
 }
