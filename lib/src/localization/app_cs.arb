@@ -13,10 +13,11 @@
   "dark_theme": "Tmavé Téma",
   "system_theme": "Systemové Téma",
   "edit_note": "Editovat",
-  "new_note": "Nový",
+  "new_note": "Nová poznámka",
   "delete_note": "Smazat",
   "save": "Uložit",
   "title": "Název:",
   "body": "Tělo:",
-  "time": "Čas:"
+  "date": "Datum:",
+  "create": "Vytvoř"
 }

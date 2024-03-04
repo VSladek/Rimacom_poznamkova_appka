@@ -7,14 +7,15 @@ class Note {
 
   final String detail;
 
-  final int date;
+  final DateTime date;
+
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
       'detail': detail,
-      'date': date,
+      'date': date.toIso8601String(),
     };
   }
 
@@ -23,7 +24,7 @@ class Note {
       json['id'] as int,
       json['name'] as String,
       json['detail'] as String,
-      json['date'] as int,
+      DateTime.parse(json['date'] as String),
     );
   }
 }
