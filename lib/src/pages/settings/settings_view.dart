@@ -54,6 +54,7 @@ class FileSetting extends StatelessWidget {
               child: Text(AppLocalizations.of(context)!.format_json),
             ),
             DropdownMenuItem(
+              enabled: false,
               value: const NoteSaveFormat('txt'),
               child: Text(AppLocalizations.of(context)!.format_txt),
             ),

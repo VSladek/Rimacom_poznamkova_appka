@@ -1,20 +1,27 @@
+import 'package:intl/intl.dart' show DateFormat;
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../notes/note_list.dart';
-import 'note.dart';
+import '../notes/note_edit.dart';
 
-class NoteDetail extends StatelessWidget {
-  const NoteDetail({super.key, required this.note});
+class NoteDetail extends StatefulWidget {
+  const NoteDetail({super.key, required this.id});
 
   static const routeName = 'note';
-  final Note note;
+  final int id;
 
   @override
+  State<NoteDetail> createState() => _NoteDetailState();
+}
+
+class _NoteDetailState extends State<NoteDetail> {
+  @override
   Widget build(BuildContext context) {
+    final noteList = Provider.of<NotesList>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
-        title: Text(note.name),
+        title: Text(noteList.notes[widget.id].title),
       ),
       body: Center(
         child: Column(
@@ -27,10 +34,10 @@ class NoteDetail extends StatelessWidget {
                 const SizedBox(
                   width: 6,
                 ),
-                Text(note.date.toLocal().toString()),
+                Text(DateFormat.yMd().format(noteList.notes[widget.id].date.toLocal())),
               ],
             ),
-            Text(note.detail,
+            Text(noteList.notes[widget.id].body,
                 style: const TextStyle(
                   fontSize: 20,
                 )),
@@ -39,9 +46,15 @@ class NoteDetail extends StatelessWidget {
       ),
       persistentFooterButtons: [
         FloatingActionButton(
+          heroTag: 'edit_${widget.id}',
           onPressed: () {
-            final noteList = Provider.of<NotesList>(context, listen: false);
-            noteList.editNote(note.id,"Changed title",null,null);
+            setState(() {
+              showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return NoteEdit(id: widget.id, edit: noteList.editNote);
+              });
+            });
           },
           backgroundColor: Colors.blue[400],
           child: const Icon(
@@ -51,9 +64,12 @@ class NoteDetail extends StatelessWidget {
           ),
         ),
         FloatingActionButton(
+          heroTag: 'delete_${widget.id}',
           onPressed: () {
-            final noteList = Provider.of<NotesList>(context, listen: false);
-            noteList.removeNote(note.id);
+            setState(() {
+              noteList.removeNote(widget.id);
+              Navigator.pop(context);
+            });
           },
           backgroundColor: Colors.blue[400],
           child: const Icon(

@@ -1,30 +1,25 @@
 class Note {
-  const Note(this.id, this.name, this.detail, this.date);
+  const Note(this.title, this.body, this.date);
 
-  final int id;
+  final String title;
 
-  final String name;
-
-  final String detail;
+  final String body;
 
   final DateTime date;
 
+  factory Note.fromJson(Map<String, dynamic> json) {
+    return Note(
+      json['title'],
+      json['body'],
+      DateTime.parse(json['date']),
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'name': name,
-      'detail': detail,
+      'title': title,
+      'body': body,
       'date': date.toIso8601String(),
     };
-  }
-
-  factory Note.fromJson(Map<String, dynamic> json) {
-    return Note(
-      json['id'] as int,
-      json['name'] as String,
-      json['detail'] as String,
-      DateTime.parse(json['date'] as String),
-    );
   }
 }

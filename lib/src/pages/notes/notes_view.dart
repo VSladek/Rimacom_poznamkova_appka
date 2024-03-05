@@ -18,7 +18,7 @@ class NoteView extends StatefulWidget {
 class _NoteViewState extends State<NoteView> {
   @override
   Widget build(BuildContext context) {
-    final noteList = Provider.of<NotesList>(context, listen: false);
+    final noteList = Provider.of<NotesList>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.appTitle),
@@ -52,16 +52,14 @@ class _NoteViewState extends State<NoteView> {
         itemCount: noteList.notes.length,
         itemBuilder: (BuildContext context, int index) {
           final note = noteList.notes[index];
-
           return ListTile(
-              title: Text(note.name),
-              leading: Text('${note.id}:', style: const TextStyle(fontSize: 16),),
+              title: Text(note.title),
+              leading: Text('${index+1}:', style: const TextStyle(fontSize: 16),),
               onTap: () {
-                final noteJson = note.toJson();
                 Navigator.restorablePushNamed(
                   context,
                   NoteDetail.routeName,
-                  arguments: noteJson,
+                  arguments: index,
                 );
               });
         },
