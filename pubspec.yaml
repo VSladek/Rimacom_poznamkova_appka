@@ -15,6 +15,11 @@ dependencies:
   provider:
   path_provider:
   localstorage:
+  file_picker:
+  file:
+  http:
+  universal_html:
+  mime:
   intl: any
 
 dev_dependencies:

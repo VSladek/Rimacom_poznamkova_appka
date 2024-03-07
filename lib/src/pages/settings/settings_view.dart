@@ -1,7 +1,12 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'settings_controller.dart';
 import '../notes/note_saving.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
+import '../notes/note_list.dart';
+import 'package:flutter/foundation.dart' as WebPlatform;
 
 
 class SettingsView extends StatelessWidget {
@@ -22,13 +27,115 @@ class SettingsView extends StatelessWidget {
           ThemeSetting(controller: controller),
           LanguageSetting(controller: controller),
           FileSetting(controller: controller),
-          //Export All Notes - from zip?
-          //Import Notes - from zip?
+          const SizedBox(height: 2,),
+          const FileDownload(),
+          const SizedBox(height: 10,),
+          const FileUpload(),
         ],
       ),
     );
   }
 }
+
+class FileDownload extends StatelessWidget {
+  const FileDownload({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final noteList = Provider.of<NotesList>(context, listen: true);
+    return Row(
+      children: [
+        const SizedBox(width: 16),
+        ElevatedButton(onPressed: () async {
+          try {
+            String? outputFile;
+            if (WebPlatform.kIsWeb) { 
+              await noteList.downloadNotes(outputFile, context, web: true);
+              }
+            else if (Platform.isAndroid || Platform.isIOS){
+              outputFile = await FilePicker.platform.getDirectoryPath(
+                dialogTitle: 'Please select where to download file:',
+              );
+              outputFile = "$outputFile/notes.json";
+              //print(outputFile);
+              }
+            else {
+                outputFile = await FilePicker.platform.saveFile(
+                  dialogTitle: 'Please select where to download file:',
+                  fileName: 'notes.json',
+                );
+              }
+              //print(outputFile);
+              if (outputFile != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Downloading notes...')),
+                );
+
+                await noteList.downloadNotes(outputFile, context);
+
+            }
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error: $e')),
+              );
+            }
+        }, 
+        child: Text(AppLocalizations.of(context)!.export))
+      ],
+    );
+  }
+}
+
+class FileUpload extends StatelessWidget {
+  const FileUpload({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final noteList = Provider.of<NotesList>(context, listen: false);
+
+    return Row(
+      children: [
+        const SizedBox(width: 16),
+        ElevatedButton(onPressed: () async {
+            try {
+              FilePickerResult? result = await FilePicker.platform.pickFiles(
+                type: FileType.custom,
+                allowedExtensions: ['json'],
+              );
+              //print(result.toString());
+              if (result != null) {
+                  PlatformFile file = result.files.first;
+                  //print(file.name);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Importing notes...')),
+                  );
+                  //print(file.path);
+                if (!WebPlatform.kIsWeb) {
+                  await noteList.importNotes(file, context);
+                } else {
+                  await noteList.importNotes(file, context, web: true);
+                }
+
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Error: File is empty')),
+                );
+                return;
+              }
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error: $e')),
+              );
+            }
+          },
+          child: Text(AppLocalizations.of(context)!.import),
+        ),
+      ],
+    );
+  }
+}
+
+
 
 class FileSetting extends StatelessWidget {
   const FileSetting({
