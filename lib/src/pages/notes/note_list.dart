@@ -26,7 +26,7 @@ class NotesList extends ChangeNotifier {
   }
 
   void removeNote(int index) {
-    notes.removeAt(index-1);
+    notes.removeAt(index);
     saveNotes();
   }
 
