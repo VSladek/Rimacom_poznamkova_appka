@@ -46,13 +46,13 @@ class _NoteDetailState extends State<NoteDetail> {
       ),
       persistentFooterButtons: [
         FloatingActionButton(
-          heroTag: 'edit_${widget.id+1}',
+          heroTag: 'edit_${widget.id}',
           onPressed: () {
             setState(() {
               showDialog(
               context: context,
               builder: (BuildContext context) {
-                return NoteEdit(id: widget.id+1, edit: noteList.editNote);
+                return NoteEdit(id: widget.id, edit: noteList.editNote);
               });
             });
           },
@@ -67,7 +67,7 @@ class _NoteDetailState extends State<NoteDetail> {
           heroTag: 'delete_${widget.id+1}',
           onPressed: () {
             setState(() {
-              noteList.removeNote(widget.id+1);
+              noteList.removeNote(widget.id);
               Navigator.pop(context);
             });
           },

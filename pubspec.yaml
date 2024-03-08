@@ -1,5 +1,5 @@
 name: rimacom_poznamkova_appka
-description: "A new Flutter project."
+description: "A notes app for Rimacom"
 publish_to: 'none'
 version: 0.1.0
 
@@ -16,10 +16,8 @@ dependencies:
   path_provider:
   localstorage:
   file_picker:
-  file:
   http:
   universal_html:
-  mime:
   intl: any
 
 dev_dependencies:

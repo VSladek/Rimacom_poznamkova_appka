@@ -56,7 +56,6 @@ class FileDownload extends StatelessWidget {
               outputFile = await FilePicker.platform.getDirectoryPath(
                 dialogTitle: 'Please select where to download file:',
               );
-              outputFile = "$outputFile/notes.json";
               //print(outputFile);
               }
             else {
@@ -112,6 +111,7 @@ class FileUpload extends StatelessWidget {
                   //print(file.path);
                 if (!WebPlatform.kIsWeb) {
                   await noteList.importNotes(file, context);
+                  await FilePicker.platform.clearTemporaryFiles();
                 } else {
                   await noteList.importNotes(file, context, web: true);
                 }

@@ -50,8 +50,8 @@ class _NewNoteState extends State<NewNote> {
                 keyboardType: TextInputType.datetime,
                 fieldHintText: "dd.mm.yyyy",
                 initialDate: DateTime.now(),
-                firstDate: DateTime.now(),
-                lastDate: DateTime.now().add(const Duration(days: 3648)),
+                firstDate: DateTime.now().subtract(const Duration(days: 20000)),
+                lastDate: DateTime.now().add(const Duration(days: 20000)),
                 onDateSaved: (value) {
                   _date = value;
                 },

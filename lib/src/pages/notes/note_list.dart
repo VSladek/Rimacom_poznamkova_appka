@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
+import 'package:intl/intl.dart';
 import 'package:universal_html/html.dart' as universal_html;
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
@@ -62,14 +63,19 @@ class NotesList extends ChangeNotifier {
     }
   }
 
-  late final File webFile;
-
   Future<void> downloadNotes(String? path, BuildContext context, {bool web = false}) async {
+    // get filename date
+    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
     // Get json form notes
-    String? jsonObject = notes.map((note) => note.toJson()).toList().toString();
+    List<Map<String, dynamic>> jsonObject = notes.map((note) => note.toJson()).toList();
     // make it look good
+    String json;
     if (jsonObject.isNotEmpty || notes.isNotEmpty){
-      String json = const JsonEncoder.withIndent("     ").convert(jsonObject);
+      json = [
+        for (var note in jsonObject)
+          '  ${const JsonEncoder.withIndent("  ").convert(note).replaceAll('\n', '\n  ')}',
+        ].join(',\n');
+      json = '[\n$json\n]';
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('No notes exist.')),
@@ -78,34 +84,32 @@ class NotesList extends ChangeNotifier {
     }
     if (!web) {
       //print(path);
-      // write file to selected path
-      File(path!).writeAsString(jsonObject);
+      path = "$path/notes-$date.json";
+      File(path).writeAsString(json);
       ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Notes downloaded successfully.')),
+            SnackBar(content: Text("Notes downloaded successfully to '$path'.")),
           );
     } else {
-      if (notes.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No notes exist.')),
-        );
-      return;
-    }
       try {
-      const dataType = 'application/json';
-      final base64data = base64Encode(utf8.encode(jsonObject));
-      final anchorElement = universal_html.AnchorElement(
-        href: 'data:$dataType;base64,$base64data',
-      )
-        ..setAttribute('download', 'notes.json')
-        ..click();
-    } catch (e) {
-      log('Error downloading file: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error downloading notes: $e')),
-      );
+        const dataType = 'application/json';
+        final base64data = base64Encode(utf8.encode(json));
+        final anchorElement = universal_html.AnchorElement(
+          href: 'data:$dataType;base64,$base64data',
+        )
+          ..setAttribute('download', 'notes-$date.json')
+          ..click();
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Notes successfully downloaded.")),
+          );
+      } catch (e) {
+        log('Error downloading file: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error downloading notes: $e')),
+        );
+        return;
+      }
+      }
     }
-    }
-  }
 
   Future<void> importNotes(PlatformFile file, BuildContext context, {bool web = false}) async {
     try {
@@ -151,11 +155,19 @@ class NotesList extends ChangeNotifier {
         SnackBar(content: Text('Error importing notes: $e')),
       );
     }
-
     //read form json 
-    /*[
-        {"title":"title 1", "body": "body", "date":"2023-4-8T00:00:00.000"},
-        {"title":"title 2", "body": "body", "date":"2023-4-8T00:00:00.000"},
+    /*
+    [
+        {
+          "title": "title 1",
+          "body": "body 1",
+          "date": "2023-4-8T00:00:00.000"
+        },
+        {
+          "title": "title 2", 
+          "body": "body 2", 
+          "date":"2023-4-8T00:00:00.000"
+        },
       ] 
     */
   }

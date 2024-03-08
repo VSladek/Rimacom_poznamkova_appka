@@ -74,7 +74,7 @@ packages:
     source: hosted
     version: "2.1.2"
   file:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: file
       sha256: "5fc22d7c25582e38ad9a8515372cd9a93834027aacf1801cf01164dac0ffa08c"
@@ -221,14 +221,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
-  mime:
-    dependency: "direct main"
-    description:
-      name: mime
-      sha256: "2e123074287cc9fd6c09de8336dae606d1ddb88d9ac47358826db698c176a1f2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.5"
   nested:
     dependency: transitive
     description:

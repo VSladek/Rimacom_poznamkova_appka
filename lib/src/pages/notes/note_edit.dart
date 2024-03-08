@@ -40,6 +40,12 @@ class _NoteEditState extends State<NoteEdit> {
                 initialValue: noteList.notes[widget.id].title,
                 autocorrect: true,
                 autofocus: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
                 onSaved: (value) {
                   _title = value;
                 },
@@ -49,8 +55,8 @@ class _NoteEditState extends State<NoteEdit> {
                 keyboardType: TextInputType.datetime,
                 fieldHintText: "dd.mm.yyyy",
                 initialDate: noteList.notes[widget.id].date,
-                firstDate: DateTime.now(),
-                lastDate: DateTime.now().add(const Duration(days: 3648)),
+                firstDate: DateTime.now().subtract(const Duration(days: 20000)),
+                lastDate: DateTime.now().add(const Duration(days: 20000)),
                 acceptEmptyDate: true,
                 onDateSaved: (value) {
                   _date = value;
@@ -69,9 +75,11 @@ class _NoteEditState extends State<NoteEdit> {
               const SizedBox(height: 24,),
               ElevatedButton(
                 onPressed: () {
-                  _formKey.currentState!.save();
-                  widget.edit(widget.id, _title, _body, _date);
-                  Navigator.pop(context);
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+                    widget.edit(widget.id+1, _title, _body, _date);
+                    Navigator.pop(context);
+                  }
                 },
                 child: Text(AppLocalizations.of(context)!.save),
               ),
